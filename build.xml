@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- You may freely edit this file. See commented blocks below for -->
+<!-- some examples of how to customize the build. -->
+<!-- (If you delete it and reopen the project it will be recreated.) -->
+<!-- By default, only the Clean and Build commands use this build script. -->
+<!-- Commands such as Run, Debug, and Test only use this build script if -->
+<!-- the Compile on Save feature is turned off for the project. -->
+<!-- You can turn off the Compile on Save (or Deploy on Save) setting -->
+<!-- in the project's Project Properties dialog box.-->
+<project name="Packager" default="BuildAndZip" basedir=".">
+	
+		<property name="DestSiftDriver" value="./Package/SiftDriver"/>
+		<property name="DestTAPI" value="./Package/TangibleAPI"/>
+		<property name="SrcSiftDriver" value="../SiftDriver"/>
+		<property name="SrcTAPI" value="../TangibleAPI"/>
+		<target name="BuildAndZip" >
+			<antcall target="clean"/>
+			<antcall target="build"/>
+			<antcall target ="zip"/>
+		</target>
+		
+		<target name="clean">
+			<delete dir="./Package/"/>
+		</target>
+	
+    <target name="build">
+			<!-- TODO build the damn SiftDriver -->
+			<copy todir="${DestSiftDriver}/" >
+				<fileset dir="${SrcSiftDriver}/bin"/>
+				<fileset file="${SrcSiftDriver}/cover.png"/>
+				<fileset file="${SrcSiftDriver}/manifest.json"/>
+			</copy>
+			<ant antfile="${SrcTAPI}/build.xml" dir="${SrcTAPI}/" target="clean"/>
+			<ant antfile="${SrcTAPI}/build.xml" dir="${SrcTAPI}/" target="jar"/>
+			<copy todir="${DestTAPI}/" >
+				<fileset dir="${SrcTAPI}/dist/" />
+			</copy>
+			<delete file="${DestTAPI}/README.TXT"/>
+			<copy file="./run.py" todir="./Package/"/>
+		</target>
+		
+		<target name="zip">
+			<zip basedir="./Package" destfile="./Package/Sifthesis-deployment.zip"/>
+		</target>
+</project>
