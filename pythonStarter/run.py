@@ -11,7 +11,7 @@ print("TangibleAPI is running with the pid "+str(tangibleAPI.pid))
 setup = False;
 for line in iter(tangibleAPI.stdout.readline, ''):
     line = line.strip(' \r\n')
-    #print("from TangibleAPI: --> "+line)
+    print("from TangibleAPI: --> "+line)
     if(line == "TANGIBLE_API_READY"):
         print("tangibleAPI is ready, let's start SiftDriver now")
         siftDriver = Popen(["mono", "SiftDriver/SiftDriver.exe"], stdout=PIPE, stderr=PIPE)
